@@ -14,4 +14,4 @@ RUN curl -X GET "https://repo1.maven.org/maven2/org/apache/tomcat/tomcat/${TOMCA
 ENV CATALINA_HOME=/home/tomcat/apache-tomcat-${TOMCAT_VERSION}
 ENV PATH=${PATH}:${CATALINA_HOME}/bin
 ENTRYPOINT ["catalina.sh"]
-CMD "run"
+CMD ["version"]
