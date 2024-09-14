@@ -1,5 +1,5 @@
 TOMCAT_VERSION="10.1"
-RELEASE=$(date +"%YYYY.%mm.%DD-%s")
+RELEASE=$(date +"%Y.%m.%d-%s")
 
 for JAVA_MAJOR_VERSION in 11 17 21
   do
