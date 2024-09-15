@@ -8,11 +8,24 @@ on:
 
 jobs:
 
+  setup-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+    - uses: actions/checkout@v4
+    - id: set-matrix
+      run: echo "matrix=$(jq -Rsa . build.matrix.json)" >> $GITHUB_OUTPUT
+
   build:
 
     runs-on: ubuntu-latest
-
+    needs: setup-matrix
+    strategy:
+      matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
+    env:
+      JAVA_MAJOR_VERSION: ${{ matrix.openjdk_major_version }}
+      TOMCAT_VERSION: ${{ matrix.tomcat_major_version }}
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: ./build.sh
+    - name: Build the Tomcat $TOMCAT_VERSION Docker image for Java$JAVA_MAJOR_VERSION
+      run: podman build -t tomcat${TOMCAT_VERSION}-java${JAVA_MAJOR_VERSION}:${RELEASE} --build-arg TOMCAT_MAJOR_VERSION=${TOMCAT_VERSION} --build-arg OPENJDK_MAJOR_VERSION=${JAVA_MAJOR_VERSION} --label openjdk.version=${JAVA_MAJOR_VERSION} --label tomcat.version=${TOMCAT_VERSION} .
