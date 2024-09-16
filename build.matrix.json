@@ -1,5 +1,5 @@
 { 
-  "includes": [
+  "include": [
     {
         "tomcat_major_version": "8.5",
         "openjdk_major_version": "8"
