@@ -24,9 +24,8 @@ RUN export TOMCAT_VERSION=$(curl "${MAVEN_METADATA}" 2>/dev/null | xmlstarlet se
   ls -l && \
   tar -xvzf "tomcat-${TOMCAT_VERSION}.tar.gz" && \
   ln -s apache-tomcat-${TOMCAT_VERSION} apache-tomcat && \
-  sed -i -e 's|<Listener className="org.apache.catalina.core.AprLifecycleListener" />|' \
-            '<!-- <Listener className="org.apache.catalina.core.AprLifecycleListener" /> -->|g' \
-  /home/tomcat/apache-tomcat/conf/server.xml
+  sed -i -e 's|<Listener className="org.apache.catalina.core.AprLifecycleListener" />|<!-- <Listener className="org.apache.catalina.core.AprLifecycleListener" /> -->|g' \
+    /home/tomcat/apache-tomcat/conf/server.xml
 
 ENV CATALINA_HOME=/home/tomcat/apache-tomcat
 ENV PATH=${PATH}:${CATALINA_HOME}/bin
