@@ -2,7 +2,7 @@
   "include": [
     {
         "tomcat_major_version": "8.5",
-        "openjdk_major_version": "8"
+        "openjdk_major_version": "1.8.0"
     },
     {
         "tomcat_major_version": "8.5",
@@ -18,7 +18,7 @@
     },
     {
         "tomcat_major_version": "9",
-        "openjdk_major_version": "8"
+        "openjdk_major_version": "1.8.0"
     },
     {
         "tomcat_major_version": "9",
