@@ -91,7 +91,7 @@ jobs:
         build-args: |
           TOMCAT_MAJOR_VERSION=${{ matrix.tomcat_major_version }}
           OPENJDK_MAJOR_VERSION=${{ matrix.openjdk_major_version }}
-
+        addLatest: true
 
     # Sign the resulting Docker image digest except on PRs.
     # This will only write to the public Rekor transparency log when the Docker
