@@ -46,6 +46,11 @@ jobs:
       RELEASE: ${{ needs.configure.outputs.RELEASE }}
       REGISTRY: docker.io #ghcr.io
     steps:
+    - name: debug release
+      run: |
+        echo "Release env ${{ env.RELEASE }}"
+        echo "release2 ${{ needs.configure.outputs.RELEASE }}"
+
     - name: Checkout
       uses: actions/checkout@v4
     # Install the cosign tool except on PR
