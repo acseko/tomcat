@@ -84,14 +84,13 @@ jobs:
       with:
         context: .
         push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}, ${{ env.RELEASE }}
-        labels: ${{ steps.meta.outputs.labels }}, openjdk.version=${{ matrix.openjdk_major_version }}, tomcat.version=${{ matrix.tomcat_major_version }}
+        tags: ${{ steps.meta.outputs.tags }}, ${{ github.actor }}/tomcat${{ matrix.tomcat_major_version }}-java${{ matrix.openjdk_major_version }}:${{ env.RELEASE }}, ${{ github.actor }}/tomcat${{ matrix.tomcat_major_version }}-java${{ matrix.openjdk_major_version }}:latest
+        labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
         build-args: |
           TOMCAT_MAJOR_VERSION=${{ matrix.tomcat_major_version }}
           OPENJDK_MAJOR_VERSION=${{ matrix.openjdk_major_version }}
-        addLatest: true
 
     # Sign the resulting Docker image digest except on PRs.
     # This will only write to the public Rekor transparency log when the Docker
