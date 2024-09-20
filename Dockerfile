@@ -25,7 +25,10 @@ RUN export TOMCAT_VERSION=$(curl "${MAVEN_METADATA}" 2>/dev/null | xmlstarlet se
   tar -xvzf "tomcat-${TOMCAT_VERSION}.tar.gz" && \
   ln -s apache-tomcat-${TOMCAT_VERSION} apache-tomcat && \
   sed -i -e 's|<Listener className="org.apache.catalina.core.AprLifecycleListener" />|<!-- <Listener className="org.apache.catalina.core.AprLifecycleListener" /> -->|g' \
-    /home/tomcat/apache-tomcat/conf/server.xml
+    /home/tomcat/apache-tomcat/conf/server.xml && \
+  if [ "9" = "$(echo -e "9\n${TOMCAT_VERSION}" |sort -V |head -n1)" ]; then xmlstarlet ed -P -S -L -s /Server/Service/Engine/Host -t elem -n HCValve -v "" \
+    -i //HCValve -t attr -n "className" -v "org.apache.catalina.valves.HealthCheckValve" -r //HCValve -v Valve \
+    /home/tomcat/apache-tomcat/conf/server.xml; else echo "Tomcat ${TOMCAT_VERSION} does not support HealthCheck Valve"; fi;
 
 ENV CATALINA_HOME=/home/tomcat/apache-tomcat
 ENV PATH=${PATH}:${CATALINA_HOME}/bin
