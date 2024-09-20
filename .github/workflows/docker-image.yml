@@ -43,7 +43,7 @@ jobs:
     env:
       JAVA_MAJOR_VERSION: ${{ matrix.openjdk_major_version }}
       TOMCAT_VERSION: ${{ matrix.tomcat_major_version }}
-      RELEASE: ${{ RELEASE }}
+      RELEASE: ${{ needs.configure.outputs.RELEASE }}
       REGISTRY: docker.io #ghcr.io
     steps:
     - name: Checkout
