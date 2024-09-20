@@ -25,7 +25,7 @@ jobs:
     - name: Set Release
       run: echo "RELEASE=$(date +"%Y.%m.%d")-$GITHUB_RUN_NUMBER" >> "$GITHUB_ENV"
     - name: Print Release
-      run: echo "Release: $RELEASE"
+      run: echo "Release: ${{ env.RELEASE }}"
       
   build:
     name: Build Tomcat ${{ matrix.tomcat_major_version }} with OpenJDK ${{ matrix.openjdk_major_version }}
