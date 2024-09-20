@@ -22,6 +22,8 @@ jobs:
       run: echo "matrix=$(jq . -c < build.matrix.json)" >> $GITHUB_OUTPUT
     - id: debug-matrix
       run: echo "${{ fromJSON(steps.set-matrix.outputs.matrix) }}"
+    - name: Set Release
+      run: echo "RELEASE=$(date +"%Y.%m.%d")-$GITHUB_RUN_NUMBER" >> "$GITHUB_ENV"
       
   build:
     name: Build Tomcat ${{ matrix.tomcat_major_version }} with OpenJDK ${{ matrix.openjdk_major_version }}
@@ -44,8 +46,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-    - name: Set Release
-      run: export RELEASE=$(date +"%Y.%m.%d-%s")
     # Install the cosign tool except on PR
     # https://github.com/sigstore/cosign-installer
     - name: Install cosign
@@ -84,7 +84,7 @@ jobs:
       with:
         context: .
         push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}, ${{ github.actor }}/tomcat${{ matrix.tomcat_major_version }}-java${{ matrix.openjdk_major_version }}:${{ env.RELEASE }}, ${{ github.actor }}/tomcat${{ matrix.tomcat_major_version }}-java${{ matrix.openjdk_major_version }}:latest
+        tags: ${{ steps.meta.outputs.tags }}, ${{ env.REGISTRY }}/${{ github.actor }}/tomcat${{ matrix.tomcat_major_version }}-java${{ matrix.openjdk_major_version }}:${{ env.RELEASE }}, ${{ env.REGISTRY }}/${{ github.actor }}/tomcat${{ matrix.tomcat_major_version }}-java${{ matrix.openjdk_major_version }}:latest
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
