@@ -26,6 +26,8 @@ RUN export TOMCAT_VERSION=$(curl "${MAVEN_METADATA}" 2>/dev/null | xmlstarlet se
   ln -s apache-tomcat-${TOMCAT_VERSION} apache-tomcat && \
   sed -i -e 's|<Listener className="org.apache.catalina.core.AprLifecycleListener" />|<!-- <Listener className="org.apache.catalina.core.AprLifecycleListener" /> -->|g' \
     /home/tomcat/apache-tomcat/conf/server.xml && \
+  echo "org.apache.tomcat.util.digester.REPLACE_SYSTEM_PROPERTIES=true" >> /home/tomcat/apache-tomcat/conf/catalina.properties && \
+  echo "org.apache.tomcat.util.digester.PROPERTY_SOURCE=org.apache.tomcat.util.digester.EnvironmentPropertySource" >> /home/tomcat/apache-tomcat/conf/catalina.properties && \
   if [ "9" = "$(echo -e "9\n${TOMCAT_VERSION}" |sort -V |head -n1)" ]; then xmlstarlet ed -P -S -L -s /Server/Service/Engine/Host -t elem -n HCValve -v "" \
     -i //HCValve -t attr -n "className" -v "org.apache.catalina.valves.HealthCheckValve" -r //HCValve -v Valve \
     /home/tomcat/apache-tomcat/conf/server.xml; else echo "Tomcat ${TOMCAT_VERSION} does not support HealthCheck Valve"; fi;
@@ -36,3 +38,4 @@ ENV PATH=${PATH}:${CATALINA_HOME}/bin
 ADD entrypoint.sh /home/tomcat/entrypoint.sh
 ENTRYPOINT ["/home/tomcat/entrypoint.sh"]
 CMD ["version"]
+
