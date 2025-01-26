@@ -4,17 +4,14 @@ LABEL org.opencontainers.image.title MyTomcatDemo
 LABEL org.opencontainers.image.description "Nothing to prod, only demo"
 LABEL org.opencontainers.image.vendor acseko
   
-MAINTAINER "András Csekő<andras.cseko@gmail.com>"
-
 ARG TOMCAT_MAJOR_VERSION=10.1
 ARG OPENJDK_MAJOR_VERSION=17
 ARG MAVEN_METADATA="https://repo1.maven.org/maven2/org/apache/tomcat/tomcat/maven-metadata.xml"
 
 RUN dnf update -y --disableplugin=subscription-manager && \
-  dnf upgrade -y --disableplugin=subscription-manager
-
-RUN  dnf install -y --disableplugin=subscription-manager java-${OPENJDK_MAJOR_VERSION}-openjdk sed xmlstarlet jq && \
-     rm -rf /usr/lib/python*/site-packages/*
+  dnf upgrade -y --disableplugin=subscription-manager && \
+  dnf install -y --disableplugin=subscription-manager java-${OPENJDK_MAJOR_VERSION}-openjdk-headless sed xmlstarlet jq && \
+  rm -rf /usr/lib/python*/site-packages/*
 
 RUN mkdir -p /home/tomcat
 WORKDIR /home/tomcat
@@ -38,5 +35,3 @@ ENV PATH=${PATH}:${CATALINA_HOME}/bin
 
 ADD entrypoint.sh /home/tomcat/entrypoint.sh
 ENTRYPOINT ["/home/tomcat/entrypoint.sh"]
-CMD ["version"]
-
