@@ -16,7 +16,7 @@ RUN dnf update -y --disableplugin=subscription-manager && \
 RUN mkdir -p /home/tomcat
 WORKDIR /home/tomcat
 RUN export TOMCAT_VERSION=$(curl "${MAVEN_METADATA}" 2>/dev/null | xmlstarlet sel -t -m \
-    '//version[starts-with(., "'${TOMCAT_MAJOR_VERSION}'.")]' -v . -n |sort -Vr |head -1) && \
+    '//metadata/versioning/versions/version[starts-with(., "'${TOMCAT_MAJOR_VERSION}'.")]' -v . -n |sort -Vr |head -1) && \
   echo "Tomcat version: ${TOMCAT_VERSION}" && \
   curl -X GET "https://repo1.maven.org/maven2/org/apache/tomcat/tomcat/${TOMCAT_VERSION}/tomcat-${TOMCAT_VERSION}.tar.gz" -O -q && \
   ls -l && \
