@@ -11,7 +11,7 @@ ARG MAVEN_METADATA="https://repo1.maven.org/maven2/org/apache/tomcat/tomcat/mave
 RUN dnf update -y --disableplugin=subscription-manager && \
   dnf upgrade -y --disableplugin=subscription-manager && \
   dnf install -y --disableplugin=subscription-manager java-${OPENJDK_MAJOR_VERSION}-openjdk-headless sed xmlstarlet jq && \
-  rm -rf /usr/lib/python*/site-packages/*
+  rm -rf /usr/lib/python*/site-packages/* usr/lib64/python*/site-packages/*
 
 RUN mkdir -p /home/tomcat
 WORKDIR /home/tomcat
