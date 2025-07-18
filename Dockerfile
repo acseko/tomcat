@@ -1,8 +1,8 @@
 FROM redhat/ubi9:latest
 
-LABEL org.opencontainers.image.title MyTomcatDemo
-LABEL org.opencontainers.image.description "Nothing to prod, only demo"
-LABEL org.opencontainers.image.vendor acseko
+LABEL org.opencontainers.image.title=MyTomcatDemo
+LABEL org.opencontainers.image.description="Nothing to prod, only demo"
+LABEL org.opencontainers.image.vendor=acseko
   
 ARG TOMCAT_MAJOR_VERSION=10.1
 ARG OPENJDK_MAJOR_VERSION=17
