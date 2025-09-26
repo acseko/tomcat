@@ -8,9 +8,10 @@ ARG TOMCAT_MAJOR_VERSION=10.1
 ARG OPENJDK_MAJOR_VERSION=17
 ARG MAVEN_METADATA="https://repo1.maven.org/maven2/org/apache/tomcat/tomcat/maven-metadata.xml"
 
-RUN dnf update -y --disableplugin=subscription-manager && \
+RUN dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm -y && \
+  dnf update -y --disableplugin=subscription-manager && \
   dnf upgrade -y --disableplugin=subscription-manager && \
-  dnf install -y --disableplugin=subscription-manager java-${OPENJDK_MAJOR_VERSION}-openjdk-headless sed xmlstarlet jq && \
+  dnf install -y --disableplugin=subscription-manager java-${OPENJDK_MAJOR_VERSION}-openjdk-headless sed xmlstarlet jq lsof tini procps && \
   rm -rf /usr/lib/python*/site-packages/* usr/lib64/python*/site-packages/*
 
 RUN mkdir -p /home/tomcat
