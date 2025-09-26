@@ -1,7 +1,9 @@
 name: Maven build workflow
 on:
   schedule:
-  - cron: 0 7 * * Fri
+  - cron: "0 7 * * Fri"
+  push:
+    branches: [ "main" ]
     
 jobs:
   build:
