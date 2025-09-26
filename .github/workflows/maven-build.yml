@@ -1,0 +1,22 @@
+name: Maven build workflow
+on:
+  schedule:
+  - cron: "0 7 * * Fri"
+  push:
+    branches: [ "main" ]
+    
+jobs:
+  build:
+    name: Download required artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
