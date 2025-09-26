@@ -19,4 +19,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn -B initialize --no-transfer-progress --file pom.xml
+      - name: List files
+        run: ls -la target/packages
