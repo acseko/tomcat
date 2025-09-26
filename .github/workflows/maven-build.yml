@@ -1,5 +1,7 @@
 name: Maven build workflow
-
+on:
+  - workflow_run
+    
 jobs:
   build:
     name: Download required artifacts
