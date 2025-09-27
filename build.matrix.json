@@ -1,35 +1,11 @@
 { 
   "include": [
     {
-        "tomcat_major_version": "9",
-        "openjdk_major_version": "11"
-    },
-    {
-        "tomcat_major_version": "9",
-        "openjdk_major_version": "17"
-    },
-    {
-        "tomcat_major_version": "9",
-        "openjdk_major_version": "21"
-    },
-    {
-        "tomcat_major_version": "10.1",
-        "openjdk_major_version": "11"
-    },
-    {
         "tomcat_major_version": "10.1",
         "openjdk_major_version": "17"
     },
     {
         "tomcat_major_version": "10.1",
-        "openjdk_major_version": "21"
-    },
-    {
-        "tomcat_major_version": "11",
-        "openjdk_major_version": "17"
-    },
-    {
-        "tomcat_major_version": "11",
         "openjdk_major_version": "21"
     }
   ]
