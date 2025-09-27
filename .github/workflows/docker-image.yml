@@ -29,7 +29,22 @@ jobs:
       name: Set Release
       run: echo "RELEASE=$(date +"%Y.%m.%d")-$GITHUB_RUN_NUMBER" >> "$GITHUB_OUTPUT"
 
-      
+  download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B initialize --no-transfer-progress --file pom.xml
+      - name: List files
+        run: ls -la target/packages
+
   build:
     name: Build Tomcat ${{ matrix.tomcat_major_version }} with OpenJDK ${{ matrix.openjdk_major_version }}
     runs-on: ubuntu-latest
@@ -41,6 +56,7 @@ jobs:
       id-token: write
     needs: 
       - configure
+      - download
     strategy:
       matrix: ${{ fromJSON(needs.configure.outputs.matrix) }}
       fail-fast: false
@@ -117,29 +133,3 @@ jobs:
       # This step uses the identity token to provision an ephemeral certificate
       # against the sigstore community Fulcio instance.
       run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
-
-
-#    - name: Build the Tomcat ${{ matrix.tomcat_major_version }} Docker image for Java ${{ matrix.openjdk_major_version }}
-#      uses: actions/docker-build-push@v6
-#      with:
-#        image: ghcr.io/acseko/tomcat${{ matrix.tomcat_major_version }}-java${{ matrix.openjdk_major_version }}
-#        tags: ${{ env.RELEASE }}
-#        registry: ghcr.io
-#        dockerfile: Dockerfile
-#        username: ${{ secrets.GHCR_USERNAME }}
-#        password: ${{ secrets.GHCR_TOKEN }}
-#        build-args: |
-#          TOMCAT_MAJOR_VERSION=${{ matrix.tomcat_major_version }}
-#          OPENJDK_MAJOR_VERSION=${{ matrix.openjdk_major_version }}
-#        labels: |
-#          openjdk.version=${{ matrix.openjdk_major_version }}
-#          tomcat.version=${{ matrix.tomcat_major_version }}
-#        pushImage: false
-#        addLatest: true
-#      run: |
-#        export RELEASE=$(date +"%Y.%m.%d-%s")
-#        docker build . -t "tomcat${TOMCAT_VERSION}-java${JAVA_MAJOR_VERSION}:${RELEASE}" \
-#        --build-arg "TOMCAT_MAJOR_VERSION=${TOMCAT_VERSION}" \
-#        --build-arg "OPENJDK_MAJOR_VERSION=${JAVA_MAJOR_VERSION}" \
-#        --label "openjdk.version=${JAVA_MAJOR_VERSION}" \
-#        --label "tomcat.version=${TOMCAT_VERSION}"
