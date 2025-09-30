@@ -63,8 +63,8 @@ jobs:
         distribution: 'zulu'
         cache: maven
         cache-dependency-path: pom*.xml
-    - name: Build with Maven Tomcat version {{ matrix.tomcat_version }}
-      run: mvn -B initialize --no-transfer-progress --file "pom{{ matrix.tomcat_version }}.xml"
+    - name: Build with Maven Tomcat version ${{ matrix.tomcat_version }}
+      run: mvn -B initialize --no-transfer-progress --file "pom${{ matrix.tomcat_version }}.xml"
     - name: List files
       run: ls -la target/packages
     # Install the cosign tool except on PR
