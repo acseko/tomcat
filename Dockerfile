@@ -14,8 +14,8 @@ RUN dnf install -y --disableplugin=subscription-manager https://dl.fedoraproject
 
 RUN mkdir -p /home/tomcat/apache-tomcat
 WORKDIR /home/tomcat/apache-tomcat
-COPY target/packages/tomcat.tar.gz /home/tomcat/apache-tomcat/
-RUN tar -xvzf "tomcat.tar.gz" --strip-components=1 && \
+COPY target/packages/tomcat-*.tar.gz /home/tomcat/apache-tomcat/
+RUN tar -xvzf "tomcat-*.tar.gz" --strip-components=1 && \
   sed -i -e 's|<Listener className="org.apache.catalina.core.AprLifecycleListener" />|<!-- <Listener className="org.apache.catalina.core.AprLifecycleListener" /> -->|g' \
     conf/server.xml && \
   echo "org.apache.tomcat.util.digester.REPLACE_SYSTEM_PROPERTIES=true" >> conf/catalina.properties && \
