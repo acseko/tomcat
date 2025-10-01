@@ -15,14 +15,14 @@ RUN dnf install -y --disableplugin=subscription-manager https://dl.fedoraproject
 RUN mkdir -p /home/tomcat/apache-tomcat
 WORKDIR /home/tomcat/apache-tomcat
 COPY target/packages/tomcat-*.tar.gz /home/tomcat/apache-tomcat/
-RUN tar -xvzf "tomcat-*.tar.gz" --strip-components=1 && \
+RUN tar -xvzf "$(ls tomcat-*.tar.gz |head -1)" --strip-components=1 --exclude=apache-tomcat-*/webapps/* && \
   sed -i -e 's|<Listener className="org.apache.catalina.core.AprLifecycleListener" />|<!-- <Listener className="org.apache.catalina.core.AprLifecycleListener" /> -->|g' \
     conf/server.xml && \
   echo "org.apache.tomcat.util.digester.REPLACE_SYSTEM_PROPERTIES=true" >> conf/catalina.properties && \
   echo "org.apache.tomcat.util.digester.PROPERTY_SOURCE=org.apache.tomcat.util.digester.EnvironmentPropertySource" >> conf/catalina.properties && \
   xmlstarlet ed -P -S -L -s /Server/Service/Engine/Host -t elem -n HCValve -v "" -i //HCValve -t attr -n "className" -v "org.apache.catalina.valves.HealthCheckValve" \
     -r //HCValve -v Valve conf/server.xml && \
-  rm -rf tomcat.tar.gz && \
+  rm -rf tomcat-*.tar.gz && \
   ln -s $(dirname $(dirname $(realpath $(which java)))) /usr/lib/jvm/openjdk
 
 ENV JAVA_HOME=/usr/lib/jvm/openjdk
